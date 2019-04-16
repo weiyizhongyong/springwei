@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title></title>
+		<link rel="stylesheet" href="/static/main.css" />
+		<script src="/static/jquery.min.js"></script>
+		<script src="/static/cookie.js"></script>
+		<style>
+			.header{
+				height: 40px;
+				width: 900px;
+				margin: 0 auto 50px;
+			}
+		</style>
+	</head>
+	<body>		 
+		<div class="header">
+			<span id="s"><a href="/user/getLogin">登录 / 注册</a></span>
+			<span id="gou"><a href="/item/shopcar">购物车</a></span>
+			<span id="s1">
+				
+			</span>
+		</div>
+		<div class="nav clearfix">
+			<!--<span>小米手机</span>-->
+		</div>		
+		<ul class="shoplist clearfix">
+			<!--<li>
+				<a href="page.html">
+					<img src="img/1.jpg" alt="" />
+					<p>小米1</p>
+					<p>890</p>
+				</a>
+				<button>加入购物车</button>
+			</li>-->
+		</ul>	
+	</body>
+</html>
+<script type="text/javascript">
+    /*<![CDATA[*/ //使用js 使用for中小于号报错用它
+    var g_itemList = [];
+	window.onload = function(){
+        $.ajax({
+            type:"GET",
+            url:"http://62.234.77.156:80/item/list01",
+            xhrFields:{withCredentials:true},
+            success:function(data){
+                if(data.status == "success"){
+                    //alert("获取商品信息成功");
+                    g_itemList = data.data;
+                    //var str = "";
+                    var html = "";
+                    for (var i=0;i< g_itemList.length;i++) {
+
+                        //获取产品信息
+
+                            var item = g_itemList[i];
+
+                            html += "<li><a href=page?pid='"+item.id+"'> <img src='"+item.imgUrl+"' alt='' /> <p>"+item.title+"</p> <p>"+item.description+"</p><p>"+item.price+"</p><p>"+item.sales+"</p><p>"+item.stock+"</p> </a><button>加入购物车</button> <span style='display:none' data-id='"+item.id+"' data-title='"+item.title+"'data-price='"+item.price+"' data-img='"+item.imgUrl+"' data-sales='"+item.sales+"' data-stock='"+item.stock+"' data-description='"+item.description+"'></span> </li>";
+
+                    }
+
+                    // $(".nav").html( str );
+                    $(".shoplist").html( html );
+                    //为span添加鼠标移入事件
+                    $(".nav span").mouseenter(function(){
+                        //data() 方法可以获取自定义属性data-*属性值
+
+                        var page = "";
+                        for (var i=0;i< g_itemList.length;i++) {
+                            var item = g_itemList[i];
+                            page +=  "<li><a href=page?pid='"+item.id+"'> <img src='"+item.imgUrl+"' alt='' /> <p>"+item.title+"</p> <p>"+item.description+"</p><p>"+item.price+"</p><p>"+item.sales+"</p><p>"+item.stock+"</p> </a><button>加入购物车</button> <span style='display:none' data-id='"+item.id+"' data-title='"+item.title+"'data-price='"+item.price+"' data-img='"+item.imgUrl+"' data-sales='"+item.sales+"' data-stock='"+item.stock+"' data-description='"+item.description+"'></span> </li>";
+                            alert("你好");
+                        }
+                        $(".shoplist").html( page );
+                    })
+
+                }else{
+                    alert("获取商品信息失败，原因为"+data.data.errMsg);
+                }
+
+            },
+            error:function(data){
+                alert("获取商品信息失败2，原因为"+data.responseTest);
+
+            }
+        });
+        //点击加入购物车   实现添加功能
+        $(".shoplist").on("click","button",function(){
+            var arr = [];
+            var flag = true;//当flag值为true时   可以向数组中添加商品
+            var proJson = {
+                id : $(this).next().data("id"),
+                title : $(this).next().data("title"),
+                description : $(this).next().data("description"),
+                sales : $(this).next().data("sales"),
+                stock : $(this).next().data("stock"),
+                imgUrl : $(this).next().data("img"),// ,
+                price : $(this).next().data("price"),
+                amount : 1
+            }
+            //判断当前点击的商品在cookie中是否存在
+            //首先将cookie的数据取出来
+            var  oldcookie = getCookie("prolist"); //如果有cookie值就是一个数组  如果没有cookie值是一个空数组
+            if( oldcookie.length != 0  ){ //说明有cookie数据
+                //将取出的cookie数据存入到arr中
+                arr = oldcookie;
+                //判断当前对象proJson在oldcookie中是否存在
+                for( var i = 0 ; i < arr.length ; i++ ){
+                    if( proJson.id == arr[i].id && proJson.title == arr[i].title ){
+                        //下标i对应的商品就是proJson这个对象
+                        arr[i].amount++;
+                        flag = false;
+                        break;
+                    }
+                }
+            }
+            if( flag ){
+                arr.push( proJson );
+            }
+            setCookie( "prolist", JSON.stringify(arr) );
+
+            if( !confirm("点击确定，继续购物，点击取消，跳转到购物车~~~") ){
+                location.href = "shopcar";
+            }
+            //console.log( document.cookie );
+        })
+
+		};
+
+    /*]]>*/
+</script>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title></title>
+		<script src="jquery.min.js"></script>
+		
+		<style>
+			#shopbtn{
+				font-size: 30px;
+				padding: 5px 10px;
+				border: 1px solid red;
+				margin-bottom: 20px;
+				cursor: pointer;
+			}
+			p,button{
+				margin-left:80px;
+			}
+			img{
+				margin-left:40px ;
+			} 
+		</style>
+		<script src="cookie.js"></script>
+	</head>
+	<body>
+		
+		<div class="shopinfo">
+			<!--<img src="img/1.jpg" alt="" />
+			<p>小米1</p>
+			<p>333</p>
+			<button>购买</button>-->
+		</div>
+		
+			
+	</body>
+</html>
+<script type="text/javascript">
+ 	//页面加载获取路径信息
+ 	var str = location.href;
+ 	//http://127.0.0.1/shopCart1722/page.html?pid=shop01&cname=classify001
+ 	str = str.split("?")[1];//"pid=shop01&cname=classify001"
+ 	var arr = str.split("&");//["pid=shop01","cname=classify001"]
+ 	var pid = arr[0].split("=")[1];
+ 	var cname = arr[1].split("=")[1];
+	
+	$.ajax({
+		type:"get",
+		url:"http://127.0.0.1/shopCart1722/data.json",
+		success : function(json){
+			for( var i = 0 ; i < json[cname].list.length ; i++ ){
+				var item = json[cname].list[i];
+				if( pid == item.id ){
+					$(".shopinfo").html(`<img src="img/${ item.src }" alt="" />
+										<p>${item.name}</p>
+										<p>${item.price}</p>
+										<button>购买</button>`);
+					break;
+				}
+			}
+		}
+	});
+</script>
