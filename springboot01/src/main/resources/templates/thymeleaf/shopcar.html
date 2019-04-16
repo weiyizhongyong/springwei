@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title></title>
+
+		<link rel="stylesheet" href="/static/main.css" />
+		<script src="/static/jquery.min.js"></script>
+
+		<style>
+			.shoplist{
+				width: 1050px;
+			}
+			.shop-item{
+				width: 100%;
+				
+				/*border: 1px solid #d1d1d1;*/
+				margin: 20px auto;
+				text-align: center;
+			}
+			.fl{
+				float: left;
+			}
+			.shop-item input[type="checkbox"]{
+				width: 30px;
+				height: 30px;
+			}
+			.shop-item .fl{
+				padding: 10px;
+				width: 129px;
+				display: block;
+				font-style: normal;
+				height: 150px;
+				border: 1px solid #d1d1d1;
+				margin-left: -1px;
+			}
+			.shop-item .fl:after{
+				content: "";
+				display: inline-block;
+				vertical-align: middle;
+				height: 100%;
+			}
+			.shop-item .count > span{
+				display: inline-block;
+				width: 30px;
+				height: 30px;
+				border: 1px solid #d1d1d1;
+				line-height: 30px;
+				cursor: pointer;
+				margin-left: 5px;
+			}
+			#sum{
+				width: 1050px;
+				margin: 20px auto 100px;
+				text-align: right;
+			}
+		</style>
+	</head>
+	<body>
+	 
+		<div class="shoplist">
+			<!--
+				'<div class="shop-item clearfix">'+
+					'<p class="fl"><input type="checkbox" class="ck"/></p>'+
+					'<img class="fl" src="img/'+ shopinfo.src +'" alt="" />'+
+					'<p class="fl">'+ shopinfo.name +'</p>'+
+					'<span class="fl">'+ shopinfo.price +'元</span>'+
+					'<p class="fl count" '+
+						'data-id="'+ shopinfo.id +'" '+
+						'data-price="'+ shopinfo.price +'" data-count="'+ shopinfo.count +'"'+
+						'data-name="'+ shopinfo.name +'" data-src="'+ shopinfo.src +'"'+
+						'>'+
+						'<span class="updateCount" data-number="1">+</span>'+
+						'<span class="shop-count">'+ shopinfo.count +'</span>'+
+						'<span class="updateCount" data-number="-1">-</span>'+
+					'</p>'+
+					'<em class="fl sumPrice">'+ (shopinfo.count * shopinfo.price) +'元</em>'+
+					'<i class="fl delBtn">删除</i>'+
+				'</div>';
+			-->
+		</div>
+		<div id="sum" class="clearfix">
+			<button class="btn blue" id="login" type="submit">
+				共<span class="count2"></span>件商品，合计<span class="money2"></span>元,结算
+			</button>
+
+			<label class="fl">
+				<input id="selectAll" type="checkbox"/>全选
+			</label>
+		</div>
+		
+	</body>
+</html>
+<script src="/static/cookie.js"></script>
+<script>
+    /*<![CDATA[*/ //使用js 使用for中小于号报错用它
+	//获取cookie数据  将数据显示到页面上
+	var arr = getCookie("prolist");
+	var str = "";
+	for( var i = 0 ; i < arr.length ; i++ ){
+		var shopinfo = arr[i];
+		str += '<div class="shop-item clearfix">'+
+					'<p class="fl"><input type="checkbox" class="ck"/></p>'+
+					'<img class="fl" src="'+ shopinfo.imgUrl +'" alt="" />'+
+					'<p class="fl">'+ shopinfo.title +'</p>'+
+					'<span class="fl">'+ shopinfo.price +'元</span>'+
+					'<p class="fl count" '+
+						'data-id="'+ shopinfo.id +'" '+
+						'data-price="'+ shopinfo.price +'" data-count="'+ shopinfo.count +'"'+
+						'data-title="'+ shopinfo.title +'" data-imgUrl="'+ shopinfo.imgUrl +'"'+
+						'>'+
+						'<span class="updateCount" data-number="1">+</span>'+
+						'<span class="shop-count">'+ shopinfo.amount +'</span>'+
+						'<span class="updateCount" data-number="-1">-</span>'+
+					'</p>'+
+					'<em class="fl sumPrice">'+ (shopinfo.amount * shopinfo.price) +'元</em>'+
+					'<i class="fl delBtn">删除</i>'+
+				'</div>'
+	}
+	$(".shoplist").html( str );
+	//加减操作
+	$(".updateCount").click(function(){
+		//找到确定要加或减的商品 id 和 name
+		var pid = $(this).parent().data("id");
+		var pname = $(this).parent().data("title");
+		var num = $(this).parent().find(".shop-count").html();//当前商品数量
+		var sign = $(this).data("number");//获取操作符
+		//如果点击的是  -  并且数量值是  1   就阻止下面代码执行
+		if( sign==-1 && num == 1){
+			return;
+		}
+		for( var i = 0 ; i < arr.length ; i++ ){
+			if( pid == arr[i].id && pname == arr[i].title ){
+				sign == 1 ? arr[i].amount ++ : arr[i].amount--;
+				setCookie("prolist",JSON.stringify(arr));
+				//操作界面
+				$(this).parent().find(".shop-count").html( arr[i].amount );
+				//总金额改变  arr[i].count * arr[i].price
+				$(this).parent().next().html( arr[i].amount * arr[i].price + "元" );
+				jiesuan();
+				break;
+			}
+		}
+	})
+	//删除
+	$(".delBtn").click(function(){
+		//获取当前删除的商品编号  和 名称  判断这些数据  属于arr中的哪一个商品，确定某商品后再将其删除
+		//获取当前删除的商品编号 和 商品名称
+		var pid = $(this).parent().find(".count").data("id");
+		var pname = $(this).parent().find(".count").data("title");
+		for( var i = 0 ; i < arr.length ; i++ ){
+			if( pid == arr[i].id && pname == arr[i].title ){ //确定了要删除的商品
+				//删除 i 位置处的 商品  splice
+				arr.splice(i,1);
+				//重新设置cookie
+				setCookie("prolist",JSON.stringify(arr));
+				break;
+			}
+		}
+		$(this).parent().remove();//改变页面
+	})
+	//点击所有的复选框  累加被选中的复选框的数量和金额
+	$(".ck").click(function(){
+		jiesuan();
+	})
+	//结算
+	function jiesuan(){
+		var sumCount = 0;
+		var moneyCount = 0;
+		//计算被选中的商品的数量和金额
+		$(".ck:checked").each(function(){
+			//console.log( $(this).parent().parent().find( ".shop-count" ).html() )
+			sumCount += parseInt( $(this).parent().parent().find( ".shop-count" ).html() );
+			moneyCount += parseInt( $(this).parent().parent().find(".sumPrice").html() );
+		})
+		$(".count2").html( sumCount );
+		$(".money2").html( moneyCount );
+	}
+	//全选
+	$("#selectAll").click(function(){
+		$(".ck").prop("checked",$(this).prop("checked"));
+		jiesuan();
+
+	});
+
+    $("#login").on("click",function(){
+        var jsonarr = [];
+
+        //console.log(arr);
+        for(var i=0; i<arr.length; i++){
+            var ss ={"id" : arr[i].id,"amount":arr[i].amount};
+            jsonarr.push(ss);
+		}
+        //console.log(typeof arr);
+
+
+
+
+
+        $.ajax({
+            type:"POST",
+            //contentType:"application/x-www-form-urlencoded",
+            contentType:"application/json;charset=UTF-8",
+            dataType:'json',
+            url:"http://62.234.77.156:80/order/jsonOrder",
+            //url:"student",
+            data:JSON.stringify(jsonarr),
+
+            /*允许跨域的请求*/
+            xhrFields:{withCredentials:true},
+            success:function(data){
+                if(data.status == "success"){
+                    alert("下单成功");
+                    // for( var i = 0 ; i < arr.length ; i++ ){
+                    //      //确定了要删除的商品
+                    //         //删除 i 位置处的 商品  splice
+						//     console.log(arr.length);
+                    //         arr.splice(i,1);
+                    //         //重新设置cookie
+                    //         setCookie("prolist",JSON.stringify(arr));
+                    //
+                    //
+                    // }
+                    //console.log(arr.length);
+                    arr.splice(0,arr.length);
+                    setCookie("prolist",JSON.stringify(arr));
+                    $(".delBtn").parent().remove();
+                    window.location.href="/item/listall";
+
+                }else{
+                    alert("下单失败，原因为"+data.data.errMsg);
+                    if(data.data.errCode == 20003){
+                        window.location.href="/user/getLogin";
+                    }
+                }
+
+            },
+            error:function(data){
+                alert("创建失败2，原因为"+data.responseTest);
+
+            }
+        });
+        return false;
+    });
+    /*]]>*/
+</script>

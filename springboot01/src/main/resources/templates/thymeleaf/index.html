@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<!--内联表 》 内部样式 》 外部样式 》 浏览器默认样式-->
+<head lang="en">
+    <meta charset="UTF-8" />
+    <title></title>
+    <script>
+        function displayDate(){
+            document.getElementById("demo0").innerHTML=Date();
+        }
+    </script>
+    <style type="text/css">
+        body {background-color:yellow;}
+        h1   {font-size:36pt;}
+        h2   {color:blue;}
+        p    {margin-left:50px;text-indent:50px;}
+        #para1
+        {
+            text-align:center;
+            color:red;
+        }
+        .center{
+            text-align:center;}
+        p.uppercase {text-transform:uppercase;}
+        p.lowercase {text-transform:lowercase;}
+        p.capitalize {text-transform:capitalize;}
+        a:link {color:#000000;}      /* 未访问链接*/
+        a:visited {color:#00FF00;}  /* 已访问链接 */
+        a:hover {color:#FF00FF;}  /* 鼠标移动到链接上 */
+        a:active {color:#0000FF;}  /* 鼠标点击时 */
+        ul.a {list-style-type:circle;}
+        ul.b {list-style-type:square;}
+        ol.c {list-style-type:upper-roman;}
+        ol.d {list-style-type:lower-alpha;}
+        table {border-collapse:collapse;
+            width: 100%;}
+        table,td,th {border:1px solid black}
+        td {text-align: center;}
+        th {
+            background-color: green;color:white;}
+        #div1 {
+            background-color: lightgrey;
+            width: 300px;
+            border: 25px solid green;
+            padding: 25px;
+            margin: 25px;
+        }
+        div.ex
+        {
+            background-color: green;
+            width:220px;
+            padding:10px;
+            border:5px solid gray;
+            margin:0px;
+        }
+        h1,h2,p/*并集*/
+        {
+            color:green;
+        }
+        .marked p/*交集*/
+        {
+            color:white;
+        }
+        h2.pos_right
+        {
+            position:relative;
+            left:20px;
+        }
+        h2.pos_left
+        {
+            position:relative;
+            top:20px;
+        }
+    </style>
+    <!--连接外部样式表-->
+    <link rel="stylesheet" type="text/css" href="mystyle.css" />
+</head>
+<body style="background: rgba(0,56,76,0.5)">
+<p id="demo">
+    JavaScript 可以触发事件，就像按钮点击。</p>
+<script>
+    document.write("Hello \
+        World!");
+    var d=new Date().getDay();
+    var x
+    switch (d)
+    {
+        case 0:x="今天是星期日";
+
+            break;
+        case 1:x="今天是星期一";
+            break;
+        case 2:x="今天是星期二";
+            break;
+        case 3:x="今天是星期三";
+            break;
+        case 4:x="今天是星期四";
+            break;
+        case 5:x="今天是星期五";
+            break;
+        case 6:x="今天是星期六";
+            break;
+    }
+    document.write(x);
+    var x;
+    var txt="";
+    var person={fname:"Bill",lname:"Gates",age:56};
+    for (x in person){
+        txt=txt + person[x];
+    }
+
+
+    document.getElementById("demo").innerHTML=txt;
+
+
+    var i=0;
+    var ss = (5 > 4) ? 5:"fwwe"
+    document.write("<p>"+ss+"</p>")
+    if( 5 > 6) { document.write("wfg")}
+    else if (5 > 3) {document.write("<p>"+i+"</p>")}
+    else {document.write("<p>"+ss+"</p>")}
+    var car = new Array();
+    car[0]="qqwefeq";
+    car[1]="qqwefeq";
+    car[2]="qqwefeq";
+    cars=["BMW","Volvo","Saab","Ford"];
+
+        document.write(cars[i] + "<br />");
+    var person=
+        {
+            firstname : "John",
+            lastname  : "Doe",
+            id        :  5566
+        };
+    document.write(person.lastname + "<br />");
+    document.write(person["lastname"] + "<br />");
+    document.write(car[0]+"  Hello World! +<p>wfweewfwef</p><br />");
+    document.write(car[1]+"  Hello World! +<p>wfweewfwef</p><br />");
+    document.write(car[2]+"  Hello World! +<p>wfweewfwef</p><br />");
+
+
+
+    function myFunction()
+    {//wfe
+        document.getElementById("demo").innerHTML="Hello JavaScript!";
+    }
+</script>
+
+<button type="button" onclick="myFunction()">点我</button>
+<noscript>抱歉，你的浏览器不支持 JavaScript!</noscript>
+Thymeleaf模板引擎
+<h1 th:text="${name}">hello world~~~~~~~</h1>
+<h2 style="background: #8AC007">这是一个标题</h2>
+<!--段落-->
+<br/>
+<p class="uppercase" >This is some text.</p>
+<p class="lowercase">This is some text.</p>
+<p class="capitalize">This is some text.</p>
+<p id="para1">这是一个段落</p>
+<button type="button" onclick="alert('nihao!')">ccccccccccccccccccc</button>
+<hr />
+<!--<p>zwee</p>-->
+<br />
+<img src="http://www.runoob.com/wp-content/uploads/2016/04/img_forest.jpg" alt="Forest" width="600" height="400" />
+<img src="http://www.runoob.com/wp-content/uploads/2016/04/img_lights.jpg" alt="Forest" width="600" height="400" />
+<div class="ex">上面的图片是250 px宽。
+    这个元素的总宽度也是250 px。</div>
+<!--超链接-->
+<a id="tips">有用的提示部分</a>
+<a href="#tips">访问有用的提示部分</a>
+<a href="http://www.runoob.com/html/html-links.html#tips">
+    访问有用的提示部分</a>
+<br />
+<a href="https://mail.bonc.com.cn/coremail/XT3/index.jsp?sid=BAlsihxxbcVVwwTZjPxxYJEhqhxHLGkO" target="_top">
+    发送邮件</a>
+<p><bdo dir="rtl">123456<del>7</del></bdo></p>
+<!--没有下划线-->
+<a href="http://www.baidu.com" style="text-decoration: none" target="_blank">百度</a>
+<div style="opacity:0.5;position:absolute;left:50px;width:300px;height:150px;background-color:#40B3DF"></div>
+
+<div style="font-family:verdana;padding:20px;border-radius:10px;border:10px solid #EE872A;">
+
+    <div style="opacity:0.3;position:absolute;left:120px;width:100px;height:200px;background-color:#8AC007"></div>
+
+    <h3>Look! Styles and colors</h3>
+
+    <div style="letter-spacing:12px;">Manipulate Text</div>
+
+    <div id="div1">Colors
+        <span style="background-color:#B4009E;color:#ffffff;">Boxes</span>
+    </div>
+
+    <div style="color:#000000;">and more...</div>
+
+</div>
+<p class="center">This is a paragraph.</p>
+
+<h1 style="font-family: Verdana;">一个标题</h1>
+<p class="center">一个段落。</p>
+<h1 style="text-align:center;">居中对齐的标题</h1>
+<p>这是一个段落。</p>
+
+<table border="2">
+    <tr>
+        <td>1</td>
+        <td>2</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>4</td>
+    </tr>
+</table>
+<p id="demo0">很容易找到我</p>
+<button type="button" onclick="displayDate()">显示日期</button>
+<h4>单元格跨两列:</h4>
+<table border="1">
+    <tr>
+        <th>First Name:</th>
+        <td>Bill Gates</td>
+    </tr>
+    <tr>
+        <th rowspan="2">Telephone:</th>
+        <td>555 77 854</td>
+    </tr>
+    <tr>
+        <td>555 77 855</td>
+    </tr>
+</table>
+<table width="200" border="0">
+    <tr>
+        <td colspan="2" style="background-color:#FFA500;">
+            <h1>主要的网页标题</h1>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color:#FFD700;">
+            `
+
+
+            JavaScript
+        </td>
+        <td style="background-color:#eeeeee;"><!--height:100px;width:100px;-->
+            内容在这里</td>
+    </tr>
+
+    <tr>
+        <td colspan="2" style="background-color:#FFA500;text-align:center;">
+            版权 © runoob.com</td>
+    </tr>
+
+
+
+</table>
+
+<table border="1">
+    <tr>
+        <td>
+            <p>这是一个段落</p>
+            <p>这是另一个段落</p>
+        </td>
+        <td>这个单元格包含一个表格:
+            <table border="1">
+                <tr>
+                    <td>A</td>
+                    <td>B</td>
+                </tr>
+                <tr>
+                    <td>C</td>
+                    <td>D</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>这个单元格包含一个列表
+            <ul class="a">
+                <li>apples</li>
+                <li>bananas</li>
+                <li>pineapples</li>
+            </ul>
+        </td>
+        <td>HELLO</td>
+    </tr>
+</table>
+
+
+
+
+<h4>无须列表列表：</h4>
+<ul class="b">
+    <li>coffer</li>
+    <li>tea</li>
+    <li>milk</li>
+</ul>
+
+<ol class="c">
+    <li>sfew</li>
+    <li>fweew</li>
+    <li>weew</li>
+</ol>
+<ol class="d" start ="23">
+    <li>sfew</li>
+    <li>fweew</li>
+    <li>weew</li>
+
+</ol>
+
+<div style="color:rgb(255,3,0)">
+    <h3>这是一个在 div 元素中的标题。</h3>
+    <p>这是一个在 div 元素中的文本。</p>
+</div>
+<!--MAILTO:aixinwei@bonc.com.cn-->
+<form name="input" action="" method="post" enctype="text/plain">
+    <fieldset>
+        <legend>Personal information:</legend>
+    username: <input type="text" name="user" />
+    <br />
+    password:<input type="password" name="password" />
+    <br />
+    <input type="radio" name="sex" value="bike" /> I have bike
+    <br />
+    <input type="radio" name="sex" value="male" />Male<br />
+    <input type="radio" name="sex" value="female" />Female
+    <br />
+    <input type="checkbox" name="vehicle" value="Car" />I have a car
+    <br />
+
+    <select name="店铺">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select>
+
+
+
+
+
+
+    <input type="submit" value="Submit" />
+        <input type="reset" value="重置"/>
+    </fieldset>
+</form>
+<textarea rows="10" cols="30">
+    affawfefwewe
+</textarea>
+
+
+<iframe src="http://www.baidu.com">
+    <p>您的浏览器不支持  iframe 标签。</p>
+</iframe>
+
+<b>粗体文本</b>
+<br />
+<code>计算机代码</code><br />
+<em>强调文本</em><br />
+<i>斜体文本</i><br />
+<kbd>键盘输入</kbd><br />
+<pre>预格式化文本</pre><br />
+<small>更小的文本</small><br />
+<strong >重要的文本</strong><br />
+
+<abbr /> （缩写）<br />
+    <address /> （联系信息）<br />
+        <bdo /> （文字方向）<br />
+            <blockquote /> （从另一个源引用的部分）<br />
+                <cite /> （工作的名称）<br />
+                    <del /> （删除的文本）<br />
+                        <ins /> （插入的文本）<br />
+                            <sub /> （下标文本）<br />
+                                <sup /> （上标文本）<br />
+
+
+<!--<a id="tips">提示部分</a>-->
+<a href="#tips">跳到提示部分</a>
+
+&lt; <!--等同于 <-->
+&gt; <!--等同于 >-->
+&#169; <!--等同于 ©-->
+
+<h3>这是位于正常位置的标题</h3>
+<h2 class="pos_left">这个标题相对于其正常位置向左移动</h2>
+<h2 class="pos_right">这个标题相对于其正常位置向右移动</h2>
+
+<!--<img src="static/js/png/0181114162940.png" width="500" height="2000" />-->
+</body>
+</html>
