@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- scheme约束 -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <bean id="placeholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:*.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="influxDBProperties" class="com.aura.properties.InfluxDBProperties">
+        <property name="url" value="${spring.influx.url}"></property>
+        <property name="username" value="${spring.influx.username}"></property>
+        <property name="password" value="${spring.influx.password}"></property>
+        <property name="database" value="${spring.influx.database}"></property>
+        <property name="tableName" value="${spring.influx.tableName}"></property>
+        <property name="retentionPolicy" value="${spring.influx.retention-policy}"></property>
+        <property name="connectTimeout" value="${spring.influx.connect-timeout}"></property>
+        <property name="readTimeout" value="${spring.influx.read-timeout}"></property>
+        <property name="writeTimeout" value="${spring.influx.write-timeout}"></property>
+        <property name="gzip" value="${spring.influx.gzip}"></property>
+    </bean>
+    <bean id="influxDBConnectionFactory" class="com.aura.influxdb.InfluxDBConnectionFactory">
+        <property name="properties" ref="influxDBProperties"></property>
+    </bean>
+    <bean id="pointConverter" class="com.aura.influxdb.converter.PointConverter"></bean>
+    <bean id="influxDBTemplate" class="com.aura.influxdb.InfluxDBTemplate">
+        <property name="connectionFactory" ref="influxDBConnectionFactory"></property>
+        <property name="converter" ref="pointConverter"></property>
+    </bean>
+    <!-- Spring线程池 -->
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 核心线程数 -->
+        <property name="corePoolSize" value="5" />
+        <!-- 线程池维护线程的最大数量 -->
+        <property name="maxPoolSize" value="10" />
+        <!-- 允许的空闲时间, 默认60秒 -->
+        <property name="keepAliveSeconds" value="60" />
+        <!-- 任务队列 -->
+        <property name="queueCapacity" value="50" />
+        <!-- 线程超过空闲时间限制，均会退出直到线程数量为0 -->
+        <property name="allowCoreThreadTimeOut" value="true"/>
+        <!-- 对拒绝task的处理策略 -->
+        <property name="rejectedExecutionHandler">
+            <bean class="java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy" />
+        </property>
+    </bean>
+
+</beans>
